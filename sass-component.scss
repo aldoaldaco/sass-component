@@ -1,0 +1,168 @@
+$baseUnit: 0.1;        // Speed of Orrery. At 1, 1 sec = 1 day
+$sunRad: 36px;          // Radius of the sun, added to orbit radii
+$rFactor: 3;            // Adding a radius factor so orbit radio are easier to observe
+$middleOffset: 250px;
+
+$scale: 1;              // Play around with changing this to change the visible motion default: 0.75
+
+$middle: $middleOffset*(1/$scale);
+
+$planets: (
+  ('ear', 100.5s*$baseUnit, (15px*$rFactor)+$sunRad, 3.5px, #4b94f9),
+  ('mar', 40.5s*$baseUnit, (23px*$rFactor)+$sunRad, 3px, #dd411a),
+);
+
+@mixin vp-anim($radius, $pname, $deg: 360deg) {
+  @-webkit-keyframes rot-#{$pname} {
+    from {
+      -webkit-transform: rotate(0deg)
+      translatey(-$radius)
+      rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg)
+      translatey(-$radius)
+      rotate(-$deg);
+    }
+  }
+  @-moz-keyframes rot-#{$pname} {
+    from {
+      -moz-transform: rotate(0deg)
+      translatey(-$radius)
+      rotate(0deg);
+    }
+    to {
+      -moz-transform: rotate(360deg)
+      translatey(-$radius)
+      rotate(-$deg);
+    }
+  }
+  @-keyframes rot-#{$pname} {
+    from {
+      transform: rotate(0deg)
+      translatey(-$radius)
+      rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg)
+      translatey(-$radius)
+      rotate(-$deg);
+    }
+  }
+}
+
+:host {
+  width: 100%;
+  height: 500px;
+  margin-bottom: 100px;
+  display: block;
+  background-color: #012;
+}
+
+.system {
+  position: relative;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transform: scale($scale);
+  -moz-transform: scale($scale);
+  transform: scale($scale);
+}
+
+.sun {
+  width: $sunRad*2;
+  height: $sunRad*2;
+  border-radius: $sunRad;
+  position: absolute;
+  top: $middle;
+  left: 50%;
+  margin: -$sunRad;
+  background: url('sun.png')  no-repeat;
+  background-size: $sunRad*2;
+}
+
+@each $planet in $planets {
+  $name: nth($planet, 1);
+  $orb: nth($planet,2);
+  $rad: nth($planet,3);
+  $prad: nth($planet,4);
+  $col: nth($planet,5);
+
+  @include vp-anim($rad,$name);
+
+  .#{$name} {
+    width: $prad * 2;
+    height: $prad * 2;
+    border-radius: 50%;
+    background-color: $col;
+    position: absolute;
+    top: $middle;
+    left: 50%;
+    margin: -$prad;
+    -webkit-animation: rot-#{$name} $orb infinite linear;
+    -moz-animation: rot-#{$name} $orb infinite linear;
+    animation: rot-#{$name} $orb infinite linear;
+    z-index: 2;
+  }
+  .#{$name}-path {
+    $orbitPath: $rad*2;
+    width: $orbitPath;
+    height: $orbitPath;
+    border-radius:50%;
+    z-index: 1;
+    position: absolute;
+    top: $middle;
+    left: 50%;
+    margin: -($orbitPath / 2);
+    border: solid 1px #444;
+  }
+}
+
+@include vp-anim(7px,lune);
+
+.lune {
+  width: 4px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  $lunOrb: 60.7s * $baseUnit;
+  top: 50%;
+  left: 50%;
+  margin: -1.5px;
+  -webkit-animation: rot-lune $lunOrb infinite linear;
+  -moz-animation: rot-lune $lunOrb infinite linear;
+  animation: rot-lune $lunOrb infinite linear;
+}
+
+.mar {
+  background-image: repeating-linear-gradient(to bottom, #fff, #fff 1px, transparent 1px, transparent 5px);
+}
+
+@include vp-anim(7px,pho);
+@include vp-anim(9px,dem);
+
+.pho, .dem {
+  width: 2px;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.pho {
+  $phoOrb: 15s * $baseUnit;  // Should be 0.33s but spins like it's having a fit.
+  margin: -1px;
+  -webkit-animation: rot-pho $phoOrb infinite linear;
+  -moz-animation: rot-pho $phoOrb infinite linear;
+  animation: rot-pho $phoOrb infinite linear;
+}
+
+.dem {
+  $demOrb: 10s * $baseUnit;  // Should be 1.25s, spins too fast
+  margin: -3px;
+  -webkit-animation: rot-dem $demOrb infinite linear;
+  -moz-animation: rot-dem $demOrb infinite linear;
+  animation: rot-dem $demOrb infinite linear;
+}
