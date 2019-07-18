@@ -1,9 +1,9 @@
-$baseUnit: 0.1;        // Speed of Orrery. At 1, 1 sec = 1 day
-$sunRad: 36px;          // Radius of the sun, added to orbit radii
-$rFactor: 3;            // Adding a radius factor so orbit radio are easier to observe
+$baseUnit: 0.1;        // Velocidad
+$sunRad: 36px;          // Radio del sol
+$rFactor: 3;            // Orbit radio factor
 $middleOffset: 250px;
 
-$scale: 1;              // Play around with changing this to change the visible motion default: 0.75
+$scale: 1;
 
 $middle: $middleOffset*(1/$scale);
 
@@ -152,7 +152,7 @@ $planets: (
 }
 
 .pho {
-  $phoOrb: 15s * $baseUnit;  // Should be 0.33s but spins like it's having a fit.
+  $phoOrb: 15s * $baseUnit;
   margin: -1px;
   -webkit-animation: rot-pho $phoOrb infinite linear;
   -moz-animation: rot-pho $phoOrb infinite linear;
@@ -160,7 +160,7 @@ $planets: (
 }
 
 .dem {
-  $demOrb: 10s * $baseUnit;  // Should be 1.25s, spins too fast
+  $demOrb: 10s * $baseUnit;
   margin: -3px;
   -webkit-animation: rot-dem $demOrb infinite linear;
   -moz-animation: rot-dem $demOrb infinite linear;
